@@ -46,10 +46,8 @@ class ProductFactory(factory.Factory):
             "Wrench"
         ]
     )
-    min_price = 10
-    max_price = 10000
-    numbers_of_decimals = 1
-    price = FuzzyDecimal(low=min_price, high=max_price, precision=numbers_of_decimals)
+    description = factory.Faker("text")
+    price = FuzzyDecimal(low=10, high=1000, precision=1)
     available = FuzzyChoice(choices = [True, False])
     category = FuzzyChoice(
         choices=[
