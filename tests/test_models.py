@@ -119,3 +119,27 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found.name, product.name)
         self.assertEqual(found.description, product.description)
         self.assertEqual(found.price, product.price)
+
+    def test_update_a_product(self):
+        """It should update a product"""
+        product = ProductFactory()
+        print("this product is", product)
+        product.id = None
+        product.create()
+        # Assert that the ID of the product object is not None 
+        # after calling the create() method.
+        self.assertIsNotNone(product.id)
+        #Fetch all the product back from the system.
+        products = Product.all()
+        # Assert the length of the products list is equal to 1 
+        # to verify that after updating the product, there is only 
+        # one product in the system.
+        product.description = "my own description"
+        product.update()
+        self.assertEqual(len(products), 1)
+        # Check that it matches the original product
+        my_product = products[0]
+        # Assert that the fetched product has id same as the original id.
+        self.assertEqual(my_product.id, product.id)
+        self.assertEqual(my_product.description, "my own description")
+        
