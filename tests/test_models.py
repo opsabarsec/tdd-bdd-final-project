@@ -135,6 +135,7 @@ class TestProductModel(unittest.TestCase):
         # to verify that after updating the product, there is only
         # one product in the system.
         product.description = "my own description"
+        original_id = product.id
         product.update()
         self.assertEqual(len(products), 1)
         # Check that it matches the original product
@@ -142,6 +143,11 @@ class TestProductModel(unittest.TestCase):
         # Assert that the fetched product has id same as the original id.
         self.assertEqual(my_product.id, product.id)
         self.assertEqual(my_product.description, "my own description")
+        # assert that change was only for data, no id
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, original_id)
+        self.assertEqual(products[0].description, "my own description")
 
     def test_delete_a_product(self):
         """It should delete a product"""
@@ -188,7 +194,7 @@ class TestProductModel(unittest.TestCase):
             self.assertEqual(product.name, name_product)
 
     def test_find_by_availability(self):
-        """It should Find a Product by Name"""
+        """It should Find a Product availability"""
         products = ProductFactory.create_batch(5)
         for product in products:
             product.create()
@@ -203,9 +209,10 @@ class TestProductModel(unittest.TestCase):
         # availability should match
         for product in found:
             self.assertEqual(product.available, availability_product)
+            self.assertIsInstance(product.available, bool)
 
     def test_find_by_category(self):
-        """It should Find a Product by Name"""
+        """It should Find a Product by category"""
         products = ProductFactory.create_batch(5)
         for product in products:
             product.create()
@@ -220,3 +227,22 @@ class TestProductModel(unittest.TestCase):
         # category should match
         for product in found:
             self.assertEqual(product.category, category_product)
+    
+    def test_find_by_price(self):
+        """It should Find a Product by price"""
+        products = ProductFactory.create_batch(5)
+        for product in products:
+            product.create()
+        
+        price_product = products[0].price
+
+        count = len([product for product in products if product.price == price_product])
+
+        found = Product.find_by_price(price_product)
+        self.assertRaises(TypeError, Product.find_by_price(['']))
+        # Assert if the count of the found products matches the expected count.
+        # Use a for loop to iterate over the found products
+        self.assertEqual(found.count(), count)
+        # category should match
+        for product in found:
+            self.assertEqual(product.price, price_product)
