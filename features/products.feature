@@ -46,7 +46,7 @@ Scenario: Read a Product
     Then I should see the message "Success"
     When I copy the "Id" field
     And I press the "Clear" button
-    Then I paste the "Id" field 
+    And I paste the "Id" field
     And I press the "Retrieve" button
     Then I should see the message "Success"
     And I should see "Hat" in the "Name" field
