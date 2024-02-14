@@ -87,23 +87,6 @@ def create_products():
     message = product.serialize()
     location_url = "/"  # delete once READ is implemented
     return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
-
-
-######################################################################
-# L I S T   A L L   P R O D U C T S
-######################################################################
-
-@app.route("/products", methods=["GET"])
-def get_product_list():
-    """List of all products"""
-    app.logger.info("List all")
-    products = Product.all()
-
-    data = [product.serialize() for product in products]
-    app.logger.info("[%s] Products:", len(data))
-    return data, status.HTTP_200_OK
-
-
 ######################################################################
 # R E A D   A   P R O D U C T
 ######################################################################
