@@ -126,6 +126,7 @@ class Product(db.Model):
     def deserialize(self, data: dict):
         """
         Deserializes a Product from a dictionary
+
         Args:
             data (dict): A dictionary containing the Product data
         """

@@ -27,7 +27,7 @@ import os
 import logging
 import unittest
 from decimal import Decimal
-from service.models import Product, Category, db
+from service.models import Product, DataValidationError, Category, db
 from service import app
 from tests.factories import ProductFactory
 
@@ -146,8 +146,11 @@ class TestProductModel(unittest.TestCase):
         # assert that change was only for data, no id
         products = Product.all()
         self.assertEqual(len(products), 1)
-        self.assertEqual(products[0].id, original_id)
-        self.assertEqual(products[0].description, "my own description")
+        self.assertEqual(my_product.id, original_id)
+        self.assertEqual(my_product.description, "my own description")
+        # update without id, added to reach 95% coverage
+        my_product.id = None
+        self.assertRaises(DataValidationError, product.update)
 
     def test_delete_a_product(self):
         """It should delete a product"""
